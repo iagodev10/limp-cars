@@ -1,0 +1,6 @@
+# Arquivos que não devem ser enviados para o Netlify
+.env
+.env.local
+.env.*.local
+node_modules
+dist

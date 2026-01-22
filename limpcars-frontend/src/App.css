@@ -1,0 +1,17 @@
+:root {
+    color-scheme: light;
+}
+
+html {
+    color-scheme: light;
+}
+
+body {
+    color-scheme: light;
+    font-family: 'Inter Tight', sans-serif;
+}
+
+* {
+    color-scheme: light !important;
+}
+  

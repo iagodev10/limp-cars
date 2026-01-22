@@ -1,0 +1,22 @@
+{
+  "name": "limpcars-backend",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "build": "node build-frontend.js",
+    "start": "node src/server.js",
+    "verificar-banco": "node src/database/verificar-banco.js",
+    "postinstall": "npm rebuild sqlite3 --build-from-source"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.19.2",
+    "pg": "^8.17.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}

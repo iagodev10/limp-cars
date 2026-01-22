@@ -1,0 +1,8 @@
+[build]
+  command = "npm install && npm run build"
+  publish = "dist"
+
+# Configuração para ignorar VITE_API_BASE_URL no scanner de segredos
+# URLs de API não são segredos sensíveis - são públicas e necessárias no frontend
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_API_BASE_URL"
