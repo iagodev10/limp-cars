@@ -5,7 +5,7 @@ exports.listar = async (req, res) => {
         const result = await db.query("select * from servicos where ativo = true");
         res.json(result.rows);
     } catch (err) {
-        return res.status(500).json({ erro: err.message });
+        return res.status(500).json({ erro: err && err.message ? err.message : 'Erro desconhecido' });
     }
 };
 
@@ -26,7 +26,7 @@ exports.criar = async (req, res) => {
         const result = await db.query(sql, [nome, descricao, valor, imagem_url, duracao_minutos]);
         res.status(201).json({ id: result.rows[0].id });
     } catch (err) {
-        return res.status(500).json({ erro: err.message });
+        return res.status(500).json({ erro: err && err.message ? err.message : 'Erro desconhecido' });
     }
 }
 
@@ -53,7 +53,7 @@ exports.atualizar = async (req, res) => {
 
         res.json({ atualizado: true });
     } catch (err) {
-        return res.status(500).json({ erro: err.message });
+        return res.status(500).json({ erro: err && err.message ? err.message : 'Erro desconhecido' });
     }
 };
 

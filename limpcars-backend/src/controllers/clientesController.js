@@ -7,7 +7,7 @@ exports.listarClientes = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao listar clientes",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 }
@@ -38,7 +38,7 @@ exports.criarCliente = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao criar cliente",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 }
@@ -68,7 +68,7 @@ exports.atualizarCliente = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao atualizar cliente",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 }
@@ -84,7 +84,7 @@ exports.deletarCliente = async (req, res) =>{
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao deletar cliente",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 }

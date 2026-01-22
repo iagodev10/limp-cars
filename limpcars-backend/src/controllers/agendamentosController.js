@@ -31,7 +31,7 @@ exports.obterAgendamento = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao buscar agendamento",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 };
@@ -76,7 +76,7 @@ exports.listarAgendamentos = async (req, res) => {
     } catch (err) {
         return res.status(500).json({
             error: "Erro ao listar agendamentos",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     }
 };
@@ -175,7 +175,7 @@ exports.criarAgendamento = async (req, res) => {
         await client.query('ROLLBACK');
         return res.status(500).json({
             error: "Erro ao criar agendamento",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     } finally {
         client.release();
@@ -257,31 +257,36 @@ exports.atualizarAgendamento = async (req, res) => {
         await client.query('ROLLBACK');
         return res.status(500).json({
             error: "Erro ao atualizar agendamento",
-            message: err.message
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
     } finally {
         client.release();
     }
 };
 
-exports.deletarAgendamento = (req, res) => {
+exports.deletarAgendamento = async (req, res) => {
     const { id } = req.params;
-
-    db.run("DELETE FROM agendamento_servicos WHERE agendamento_id = ?", [id], function (errDel) {
-        if (errDel) {
+    try {
+        const client = await db.connect();
+        try {
+            await client.query('BEGIN');
+            await client.query("DELETE FROM agendamento_servicos WHERE agendamento_id = $1", [id]);
+            const delRes = await client.query("DELETE FROM agendamento WHERE id = $1", [id]);
+            await client.query('COMMIT');
+            res.json({ removido: delRes.rowCount });
+        } catch (err) {
+            await client.query('ROLLBACK');
             return res.status(500).json({
-                error: "Erro ao remover serviços do agendamento",
-                message: errDel.message
+                error: "Erro ao deletar agendamento",
+                message: err.message
             });
+        } finally {
+            client.release();
         }
-        db.run("DELETE FROM agendamento WHERE id = ?", [id], function (err) {
-            if (err) {
-                return res.status(500).json({
-                    error: "Erro ao deletar agendamento",
-                    message: err.message
-                });
-            }
-            res.json({ removido: this.changes });
+    } catch (err) {
+        return res.status(500).json({
+            error: "Erro interno ao deletar agendamento",
+            message: err && err.message ? err.message : 'Erro desconhecido'
         });
-    });
+    }
 };
