@@ -1,19 +1,15 @@
 const db = require('../database/db')
 
-exports.listar = (req, res) => {
-    db.all(
-        "select * from servicos where ativo = 1",
-        [],
-        (err, rows) => {
-            if (err) {
-                return res.status(500).json({ erro: err.message });
-            }
-            res.json(rows)
-        }
-    );
+exports.listar = async (req, res) => {
+    try {
+        const result = await db.query("select * from servicos where ativo = true");
+        res.json(result.rows);
+    } catch (err) {
+        return res.status(500).json({ erro: err.message });
+    }
 };
 
-exports.criar = (req, res) => {
+exports.criar = async (req, res) => {
     const { nome, descricao, valor, imagem_url, duracao_minutos } = req.body;
 
     if (!nome || !valor || !duracao_minutos) {
@@ -22,22 +18,19 @@ exports.criar = (req, res) => {
 
     const sql = `
         insert into servicos (nome, descricao, valor, imagem_url, duracao_minutos)
-        values (?, ?, ?, ?, ?)
+        values ($1, $2, $3, $4, $5)
+        RETURNING id
     `;
 
-    db.run(sql,
-        [nome, descricao, valor, imagem_url, duracao_minutos],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ erro: err.message })
-            }
-            res.status(201).json({ id: this.lastID })
-        }
-    )
-
+    try {
+        const result = await db.query(sql, [nome, descricao, valor, imagem_url, duracao_minutos]);
+        res.status(201).json({ id: result.rows[0].id });
+    } catch (err) {
+        return res.status(500).json({ erro: err.message });
+    }
 }
 
-exports.atualizar = (req, res) => {
+exports.atualizar = async (req, res) => {
     const { id } = req.params;
     const { nome, descricao, valor, imagem_url, duracao_minutos } = req.body;
 
@@ -47,30 +40,24 @@ exports.atualizar = (req, res) => {
 
     const sql = `
         UPDATE servicos
-        SET nome = ?, descricao = ?, valor = ?, imagem_url = ?, duracao_minutos = ?
-        WHERE id = ?
+        SET nome = $1, descricao = $2, valor = $3, imagem_url = $4, duracao_minutos = $5
+        WHERE id = $6
     `;
 
-    db.run(
-        sql,
-        [nome, descricao, valor, imagem_url, duracao_minutos, id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ erro: err.message });
-            }
-
-            if (this.changes === 0) {
-                return res.status(404).json({ erro: 'Serviço não encontrado' });
-            }
-
-            res.json({ atualizado: true });
+    try {
+        const result = await db.query(sql, [nome, descricao, valor, imagem_url, duracao_minutos, id]);
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ erro: 'Serviço não encontrado' });
         }
-    );
+
+        res.json({ atualizado: true });
+    } catch (err) {
+        return res.status(500).json({ erro: err.message });
+    }
 };
 
-
-
-exports.alterarStatus = (req, res) => {
+exports.alterarStatus = async (req, res) => {
     const { id } = req.params;
     const { ativo } = req.body;
 
@@ -78,21 +65,20 @@ exports.alterarStatus = (req, res) => {
         return res.status(400).json({ erro: 'Campo ativo é obrigatório' });
     }
 
-    db.run(
-        'UPDATE servicos SET ativo = ? WHERE id = ?',
-        [ativo, id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({ erro: err.message });
-            }
+    try {
+        const result = await db.query(
+            'UPDATE servicos SET ativo = $1 WHERE id = $2',
+            [ativo, id]
+        );
 
-            if (this.changes === 0) {
-                return res.status(404).json({ erro: 'Serviço não encontrado' });
-            }
-
-            res.json({ status_alterado: true });
+        if (result.rowCount === 0) {
+            return res.status(404).json({ erro: 'Serviço não encontrado' });
         }
-    );
+
+        res.json({ status_alterado: true });
+    } catch (err) {
+        return res.status(500).json({ erro: err.message });
+    }
 };
 
 

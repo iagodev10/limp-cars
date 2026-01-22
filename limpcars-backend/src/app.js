@@ -4,7 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const pool = require('./database/postgres');
+const pool = require('./database/db');
 
 const app = express();
 

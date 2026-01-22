@@ -1,39 +1,42 @@
-create table if not exists clientes(
-    id integer primary key autoincrement,
-    nome varchar(100) not null,
-    telefone varchar(20) not null,
-    criado_em datetime default current_timestamp
+-- Tabela de Clientes
+CREATE TABLE IF NOT EXISTS clientes (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create table if not exists servicos(
-    id integer primary key autoincrement,
-    nome varchar(100) not null,
-    descricao text,
-    valor decimal(10,2) not null,
-    imagem_url varchar(255),
-    duracao_minutos integer not null,
-    ativo boolean default 1
+-- Tabela de Serviços
+CREATE TABLE IF NOT EXISTS servicos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    valor DECIMAL(10,2) NOT NULL,
+    imagem_url VARCHAR(255),
+    duracao_minutos INTEGER NOT NULL,
+    ativo BOOLEAN DEFAULT TRUE
 );
 
-create table if not exists agendamento(
-    id integer primary key autoincrement,
-    cliente_id integer not null,
-    data_atendimento date not null,
-    hora_atendimento time not null,
-    modelo_veiculo varchar(100) not null,
-    status varchar(20) default 'pendente',
-    observacoes text,
-    criado_em datetime default current_timestamp,
-    foreign key (cliente_id) references clientes(id)
+-- Tabela de Agendamentos
+CREATE TABLE IF NOT EXISTS agendamento (
+    id SERIAL PRIMARY KEY,
+    cliente_id INTEGER NOT NULL,
+    data_atendimento DATE NOT NULL,
+    hora_atendimento TIME NOT NULL,
+    modelo_veiculo VARCHAR(100) NOT NULL,
+    status VARCHAR(20) DEFAULT 'pendente',
+    observacoes TEXT,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
 
-create table if not exists agendamento_servicos(
-    id integer primary key autoincrement,
-    agendamento_id integer not null,
-    servico_id integer not null,
-    valor_cobrado decimal(10,2) not null,
-    FOREIGN KEY(agendamento_id) REFERENCES agendamento(id),
-    FOREIGN KEY(servico_id) REFERENCES servicos(id),
-    unique(agendamento_id, servico_id)
+-- Tabela de Relacionamento Agendamento-Serviços
+CREATE TABLE IF NOT EXISTS agendamento_servicos (
+    id SERIAL PRIMARY KEY,
+    agendamento_id INTEGER NOT NULL,
+    servico_id INTEGER NOT NULL,
+    valor_cobrado DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (agendamento_id) REFERENCES agendamento(id),
+    FOREIGN KEY (servico_id) REFERENCES servicos(id),
+    UNIQUE(agendamento_id, servico_id)
 );
-

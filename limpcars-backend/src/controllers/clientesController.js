@@ -1,22 +1,18 @@
 const db = require('../database/db');
 
-exports.listarClientes = (req, res) => {
-    db.all(
-        "select * from clientes order by criado_em desc",
-        [],
-        (err, rows) => {
-            if (err) {
-                return res.status(500).json({
-                    error: "Erro ao listar clientes",
-                    message: err.message
-                })
-            }
-            res.json(rows)
-        }
-    )
+exports.listarClientes = async (req, res) => {
+    try {
+        const result = await db.query("select * from clientes order by criado_em desc");
+        res.json(result.rows);
+    } catch (err) {
+        return res.status(500).json({
+            error: "Erro ao listar clientes",
+            message: err.message
+        });
+    }
 }
 
-exports.criarCliente = (req, res) => {
+exports.criarCliente = async (req, res) => {
     const { nome, telefone } = req.body;
 
     if (!nome || !telefone) {
@@ -28,26 +24,26 @@ exports.criarCliente = (req, res) => {
 
     const sql = `
         insert into clientes (nome, telefone)
-        values (?, ?)
+        values ($1, $2)
+        RETURNING id
     `;
 
-    db.run(sql, [nome, telefone], function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: "Erro ao criar cliente",
-                message: err.message
-            })
-        }
-
+    try {
+        const result = await db.query(sql, [nome, telefone]);
         res.status(201).json({
-            id: this.lastID,
+            id: result.rows[0].id,
             nome,
             telefone
-        })
-    })
+        });
+    } catch (err) {
+        return res.status(500).json({
+            error: "Erro ao criar cliente",
+            message: err.message
+        });
+    }
 }
 
-exports.atualizarCliente = (req, res) => {
+exports.atualizarCliente = async (req, res) => {
     const { id } = req.params
     const { nome, telefone } = req.body
 
@@ -60,41 +56,35 @@ exports.atualizarCliente = (req, res) => {
 
     const sql = `
         update clientes
-        set nome = ?, telefone = ?
-        where id = ?
+        set nome = $1, telefone = $2
+        where id = $3
     `;
 
-    db.run(sql, [nome, telefone, id], function (err) {
-        if (err) {
-            return res.status(500).json({
-                error: "Erro ao atualizar cliente",
-                message: err.message
-            })
-        }
-
+    try {
+        const result = await db.query(sql, [nome, telefone, id]);
         res.json({
-            atualizado: this.changes
-        })
-    })
+            atualizado: result.rowCount
+        });
+    } catch (err) {
+        return res.status(500).json({
+            error: "Erro ao atualizar cliente",
+            message: err.message
+        });
+    }
 }
 
-exports.deletarCliente = (req, res) =>{
+exports.deletarCliente = async (req, res) =>{
     const {id} = req.params
 
-    db.run(
-        "delete from clientes where id = ?",
-        [id],
-        function (err) {
-            if (err) {
-                return res.status(500).json({
-                    error: "Erro ao deletar cliente",
-                    message: err.message
-                })
-            }
-
-            res.json({
-                removido: this.changes
-            })
-        }
-    )
+    try {
+        const result = await db.query("delete from clientes where id = $1", [id]);
+        res.json({
+            removido: result.rowCount
+        });
+    } catch (err) {
+        return res.status(500).json({
+            error: "Erro ao deletar cliente",
+            message: err.message
+        });
+    }
 }

@@ -1,4 +1,4 @@
-require('./database/postgres');
+require('./database/db');
 
 
 const app = require('./app');
