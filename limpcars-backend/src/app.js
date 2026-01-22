@@ -35,6 +35,9 @@ const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
 
 // Rota de health check (opcional, mas recomendada)
+app.get('/', (req, res) => {
+  res.status(200).send('LimpCars API OK')
+});
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
