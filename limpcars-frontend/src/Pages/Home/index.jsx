@@ -39,7 +39,7 @@ const Home = () => {
                             Seu veículo merece o melhor tratamento.
                         </HeroDescription>
                         <CTAWrapper>
-                            <CTAButton as={Link} to="/servicos">Agendar Serviço</CTAButton>
+                            
                             <CTAButtonServicos as={Link} to="/servicos">Ver Serviços</CTAButtonServicos>
                         </CTAWrapper>
                     </Conteudo>
