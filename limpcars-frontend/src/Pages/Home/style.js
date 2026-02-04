@@ -120,37 +120,37 @@ export const CTAWrapper = styled.div`
     gap: 14px;
 `;
 
-export const CTAButton = styled.a`
-    display: inline-block;
-    padding: 16px 40px;
-    background: linear-gradient(135deg, #00e0ff 0%, #00b8d4 100%);
-    color: #050505;
-    text-decoration: none;
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 99px;
-    transition: all 0.3s ease;
-    cursor: pointer;
+// export const CTAButton = styled.a`
+//     display: inline-block;
+//     padding: 16px 40px;
+//     background: linear-gradient(135deg, #00e0ff 0%, #00b8d4 100%);
+//     color: #050505;
+//     text-decoration: none;
+//     font-family: 'Inter Tight', sans-serif;
+//     font-size: 14px;
+//     font-weight: 700;
+//     text-transform: uppercase;
+//     letter-spacing: 1px;
+//     border-radius: 99px;
+//     transition: all 0.3s ease;
+//     cursor: pointer;
 
-    @media (max-width: 768px) {
-        padding: 14px 32px;
-        font-size: 13px;
-    }
+//     @media (max-width: 768px) {
+//         padding: 14px 32px;
+//         font-size: 13px;
+//     }
 
-    @media (max-width: 480px) {
-        padding: 12px 28px;
-        font-size: 12px;
-    }
+//     @media (max-width: 480px) {
+//         padding: 12px 28px;
+//         font-size: 12px;
+//     }
 
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(0, 224, 255, 0.4);
-        background: linear-gradient(135deg, #00c4e0 0%, #00a8c4 100%);
-    }
-`;
+//     &:hover {
+//         transform: translateY(-2px);
+//         box-shadow: 0 10px 30px rgba(0, 224, 255, 0.4);
+//         background: linear-gradient(135deg, #00c4e0 0%, #00a8c4 100%);
+//     }
+// `;
 
 export const CTAButtonServicos = styled.a`
     display: inline-block;

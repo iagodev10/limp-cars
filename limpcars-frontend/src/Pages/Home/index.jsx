@@ -9,7 +9,7 @@ import Galeria from "../../components/Galeria";
 import GoogleReviews from "../../components/GoogleReviews";
 import Contato from "../../components/Contato";
 
-import { Inicio, Container, Imagem, Conteudo, Subtitle, HeroTitle, HeroDescription, CTAWrapper, CTAButton, CTAButtonServicos } from "./style";
+import { Inicio, Container, Imagem, Conteudo, Subtitle, HeroTitle, HeroDescription, CTAWrapper, CTAButtonServicos } from "./style";
 
 const Home = () => {
     const location = useLocation();
@@ -40,7 +40,7 @@ const Home = () => {
                         </HeroDescription>
                         <CTAWrapper>
                             
-                            <CTAButtonServicos as={Link} to="/servicos">Ver Serviços</CTAButtonServicos>
+                            <CTAButtonServicos as={Link} to="/servicos">Agendar Serviços</CTAButtonServicos>
                         </CTAWrapper>
                     </Conteudo>
                 </Container>
