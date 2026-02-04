@@ -131,7 +131,7 @@ export const Links = styled.div`
   }
 `;
 
-export const Link = styled.a`
+export const FooterLink = styled.a`
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   font-family: 'Inter Tight', sans-serif;
