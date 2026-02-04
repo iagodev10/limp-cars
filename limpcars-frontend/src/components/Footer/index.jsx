@@ -14,8 +14,13 @@ import {
   Link,
 } from "./style";
 
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <FooterContainer>
@@ -62,10 +67,10 @@ const Footer = () => {
 
         <BottomSection>
           <Links>
-            <Link href="#home">Início</Link>
-            <Link href="#servicos">Serviços</Link>
-            <Link href="#sobre">Sobre</Link>
-            <Link href="#contato">Contato</Link>
+            <Link onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Início</Link>
+            <Link onClick={() => navigate("/servicos")} style={{ cursor: "pointer" }}>Serviços</Link>
+            <Link onClick={() => navigate("/sobre")} style={{ cursor: "pointer" }}>Sobre</Link>
+            <Link onClick={() => navigate("/contato")} style={{ cursor: "pointer" }}>Contato</Link>
           </Links>
           <Copyright>
             © {currentYear} Limp Cars. Todos os direitos reservados.
