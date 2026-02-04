@@ -22,11 +22,30 @@ const Footer = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const handleScroll = (id) => {
+    if (location.pathname === "/") {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/", { state: { targetId: id } });
+    }
+  };
+
+  const handleHomeClick = () => {
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <FooterContainer>
       <Container>
         <TopSection>
-          <Logo>
+          <Logo onClick={handleHomeClick} style={{ cursor: "pointer" }}>
             <img src={logo} alt="Limp Cars" />
           </Logo>
           <SocialLinks>
@@ -67,10 +86,10 @@ const Footer = () => {
 
         <BottomSection>
           <Links>
-            <FooterLink onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Início</FooterLink>
+            <FooterLink onClick={handleHomeClick} style={{ cursor: "pointer" }}>Início</FooterLink>
             <FooterLink onClick={() => navigate("/servicos")} style={{ cursor: "pointer" }}>Serviços</FooterLink>
-            <FooterLink onClick={() => navigate("/sobre")} style={{ cursor: "pointer" }}>Sobre</FooterLink>
-            <FooterLink onClick={() => navigate("/contato")} style={{ cursor: "pointer" }}>Contato</FooterLink>
+            <FooterLink onClick={() => handleScroll("sobre")} style={{ cursor: "pointer" }}>Sobre</FooterLink>
+            <FooterLink onClick={() => handleScroll("contato")} style={{ cursor: "pointer" }}>Contato</FooterLink>
           </Links>
           <Copyright>
             © {currentYear} Limp Cars. Todos os direitos reservados.
